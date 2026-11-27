@@ -34,14 +34,50 @@ MAX_RATE = 0.5      # rad/s
 def keys_to_command(keys):
     vx, vy, vz = 0.0, 0.0, 0.0      # m/s
     wy, wz = 0.0, 0.0               # rad/s
+   
 
-    # TODO a) translation - the first one is done for you:
+MAX_SPEED = 0.25    # m/s
+MAX_RATE = 0.5      # rad/s
+
+def keys_to_command(keys):
+    vx, vy, vz = 0.0, 0.0, 0.0
+    wy, wz = 0.0, 0.0
+
+    # a) Translation
     if "w" in keys:
-        vx = vx + MAX_SPEED
+        vx += MAX_SPEED
+    if "s" in keys:
+        vx -= MAX_SPEED
 
-    # TODO b) rotation
+    if "a" in keys:
+        vy += MAX_SPEED
+    if "d" in keys:
+        vy -= MAX_SPEED
 
-    # TODO c) speed = math.sqrt(vx**2 + vy**2 + vz**2)
-    #         if it is larger than MAX_SPEED, scale vx, vy, vz down
+    if "r" in keys:
+        vz += MAX_SPEED
+    if "f" in keys:
+        vz -= MAX_SPEED
 
+    # b) Rotation
+    if "q" in keys:
+        wz += MAX_RATE
+    if "e" in keys:
+        wz -= MAX_RATE
+
+    if "arrowup" in keys:
+        wy -= MAX_RATE
+    if "arrowdown" in keys:
+        wy += MAX_RATE
+
+    # c) Limit total translation speed
+    speed = math.sqrt(vx**2 + vy**2 + vz**2)
+
+    if speed > MAX_SPEED:
+        scale = MAX_SPEED / speed
+        vx *= scale
+        vy *= scale
+        vz *= scale
+
+    
     return VelocityCommand(vx=vx, vy=vy, vz=vz, wy=wy, wz=wz)
